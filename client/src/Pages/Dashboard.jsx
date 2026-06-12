@@ -46,12 +46,10 @@ const Dashboard = () => {
 
     socket.on("connect", () => {
       setIsConnected(true);
-      console.log("User Connected");
     });
 
     socket.on("disconnect", () => {
       setIsConnected(false);
-      console.log("User Disconnected");
     });
 
     socket.on("chat:new", (data) => {

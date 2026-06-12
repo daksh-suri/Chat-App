@@ -2,8 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Support comma-separated origins, including wildcard Vercel-style hosts.
-const rawOrigins = process.env.CORS_ORIGIN || 'http://localhost:5173,https://*.vercel.app';
+const rawOrigins = process.env.CORS_ORIGIN || 'http://localhost:5173,https://chat-app-1k5r-qs6c68w3y-18dakshsuri-8802s-projects.vercel.app';
 
 function normalizeOrigin(origin) {
   return origin?.trim().replace(/\/$/, '');
@@ -20,15 +19,7 @@ export function isAllowedOrigin(origin) {
   const requestOrigin = normalizeOrigin(origin);
   if (!requestOrigin) return true;
 
-  return env.CORS_ORIGIN.some((allowedOrigin) => {
-    if (allowedOrigin === '*') return true;
-
-    if (allowedOrigin.startsWith('*.')) {
-      return requestOrigin.endsWith(allowedOrigin.slice(1));
-    }
-
-    return allowedOrigin === requestOrigin;
-  });
+  return env.CORS_ORIGIN.includes(requestOrigin);
 }
 
 export default env;

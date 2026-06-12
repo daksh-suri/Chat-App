@@ -6,7 +6,7 @@ import { Server } from "socket.io";
 import cors from 'cors';
 import authRoutes from './http/routes/auth.routes.js';
 import userRoutes from './http/routes/user.routes.js';
-import env, { isAllowedOrigin } from './env.js';
+import env from './env.js';
 import { socketAuth } from './socket/middleware/socket.auth.js';
 import chatHandlers from './socket/handlers/chat.handlers.js';
 import requireAuth from './http/middlewares/requireAuth.js';
@@ -18,13 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 const PORT = env.PORT || 4444;
 
 const corsOptions = {
-  origin(origin, callback) {
-    if (isAllowedOrigin(origin)) {
-      return callback(null, true);
-    }
-
-    return callback(null, false);
-  },
+  origin: env.CORS_ORIGIN,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -46,13 +40,7 @@ app.use('/api/user', requireAuth, userRoutes);
 
 const io = new Server(httpServer, {
   cors: {
-    origin(origin, callback) {
-      if (isAllowedOrigin(origin)) {
-        return callback(null, true);
-      }
-
-      return callback(null, false);
-    },
+    origin: env.CORS_ORIGIN,
     credentials: true,
   }
 });
