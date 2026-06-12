@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 const PORT = env.PORT || 4444;
 
 app.use(cors({
-    origin: env.CORS_ORIGIN
+    origin: [env.CORS_ORIGIN, env.VITE_API_URL]
 })); 
 
 const httpServer = createServer(app);
