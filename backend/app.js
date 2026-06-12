@@ -18,7 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 const PORT = env.PORT || 4444;
 
 app.use(cors({
-    origin: [env.CORS_ORIGIN, env.VITE_API_URL]
+    origin: env.CORS_ORIGIN,
+    credentials: true,
 })); 
 
 const httpServer = createServer(app);
@@ -26,7 +27,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', requireAuth, userRoutes);
 
 const io = new Server(httpServer, {
-    cors: { origin: env.CORS_ORIGIN }
+    cors: { origin: env.CORS_ORIGIN, credentials: true }
 });
 
 // Sockets ke middleware...
