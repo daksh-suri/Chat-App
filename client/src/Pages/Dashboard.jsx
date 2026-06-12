@@ -28,7 +28,7 @@ const Dashboard = () => {
   const [theme, setTheme] = useState("system");
 
   useEffect(() => {
-    const socket = io("http://localhost:4444", {
+    const socket = io(import.meta.env.VITE_API_URL || "http://localhost:4444", {
       auth: {
         token: `${auth.token}`,
       },
