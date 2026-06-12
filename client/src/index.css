@@ -1,0 +1,718 @@
+/* =====================================================================
+   Adium Concept Theme – PERN Chat App
+   Inspired by Dawid Liberadzki & Oskar Krawczyk's Adium CSS concept.
+   Source Sans Pro via Google Fonts.
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
+
+/* -------------------------------------------------------------------
+   CSS Custom Properties – Light (Adium warm palette)
+   ------------------------------------------------------------------- */
+:root {
+  --adium-bg-html: radial-gradient(ellipse at top center,
+      hsla(70, 50%, 90%, 1) 0%, hsla(240, 50%, 90%, 0) 70%),
+    radial-gradient(circle at bottom left,
+      hsla(240, 50%, 90%, 1) 0%, hsla(240, 50%, 90%, 0) 70%),
+    radial-gradient(circle at bottom right,
+      hsla(80, 100%, 90%, 1) 0%, hsla(240, 50%, 90%, 0) 70%);
+
+  --adium-window-bg: #ffffff;
+  --adium-sidebar-bg: #ffffff;
+  --adium-chat-bg: #F2F1EC;
+
+  --adium-border: #C1C1BF;
+  --adium-border-list: #E3E3E3;
+  --adium-border-header: #F0F0F0;
+  --adium-border-chat-header: hsla(0, 0%, 50%, 0.1);
+
+  --adium-text-name: #1a1a18;
+  --adium-text-dark-sub: #8D8D8D;
+  --adium-text-light-sub: #A5A5A4;
+  --adium-text-meta: #71716E;
+
+  --adium-selected-bg: #FBFBFB;
+
+  /* Bubble – received */
+  --bubble-recv-bg: #F5F4F1;
+  --bubble-recv-border: #CDCDCA;
+  --bubble-recv-shadow: #CDCDCA;
+
+  /* Bubble – sent */
+  --bubble-sent-bg: #E9F2DC;
+  --bubble-sent-border: #B7C8A1;
+
+  /* Status colours */
+  --status-online: #66B736;
+  --status-unread: #5383E3;
+  --status-replied: #BBBEC4;
+  --status-read: #BBBEC4;
+
+  /* Input */
+  --input-bg: #ffffff;
+  --input-border: #CDCDCA;
+
+  /* Accent (send button) */
+  --accent: #5383E3;
+  --accent-hover: #3f6fd1;
+  --accent-text: #ffffff;
+
+  --font: 'Source Sans 3', 'Source Sans Pro', sans-serif;
+}
+
+/* -------------------------------------------------------------------
+   Dark mode overrides
+   ------------------------------------------------------------------- */
+html.dark {
+  --adium-bg-html: radial-gradient(ellipse at top center,
+      hsla(230, 30%, 12%, 1) 0%, hsla(230, 30%, 8%, 0) 70%),
+    radial-gradient(circle at bottom left,
+      hsla(220, 40%, 10%, 1) 0%, hsla(220, 40%, 10%, 0) 70%),
+    radial-gradient(circle at bottom right,
+      hsla(100, 20%, 10%, 1) 0%, hsla(220, 30%, 8%, 0) 70%);
+
+  --adium-window-bg: #1e1e22;
+  --adium-sidebar-bg: #1a1a1e;
+  --adium-chat-bg: #18181c;
+
+  --adium-border: #3a3a3e;
+  --adium-border-list: #2e2e32;
+  --adium-border-header: #2a2a2e;
+  --adium-border-chat-header: rgba(255, 255, 255, 0.06);
+
+  --adium-text-name: rgba(255, 255, 255, 0.9);
+  --adium-text-dark-sub: rgba(255, 255, 255, 0.5);
+  --adium-text-light-sub: rgba(255, 255, 255, 0.35);
+  --adium-text-meta: rgba(255, 255, 255, 0.4);
+
+  --adium-selected-bg: #242428;
+
+  --bubble-recv-bg: #2a2a2e;
+  --bubble-recv-border: #3a3a3e;
+  --bubble-recv-shadow: rgba(0, 0, 0, 0.3);
+
+  --bubble-sent-bg: #2d4a1e;
+  --bubble-sent-border: #3d6a2a;
+
+  --input-bg: #1e1e22;
+  --input-border: #3a3a3e;
+}
+
+/* -------------------------------------------------------------------
+   Reset & Base
+   ------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  min-height: 100%;
+  background: var(--adium-bg-html);
+  background-attachment: fixed;
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.2) inset;
+}
+
+html.dark { box-shadow: 0 0 120px rgba(0, 0, 0, 0.5) inset; }
+
+body {
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+html, body, #root { min-height: 100%; }
+
+button, input { font: inherit; }
+
+/* -------------------------------------------------------------------
+   Scrollbar
+   ------------------------------------------------------------------- */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: var(--adium-border-list); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* -------------------------------------------------------------------
+   Auth pages – minimal card centred on the warm background
+   ------------------------------------------------------------------- */
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.auth-card {
+  width: min(100%, 400px);
+  background: var(--adium-window-bg);
+  border: 1px solid var(--adium-border);
+  border-radius: 8px;
+  padding: 28px 32px;
+  box-shadow: 0 0 80px hsla(0, 0%, 0%, 0.18);
+}
+
+.auth-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--adium-text-name);
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
+  margin-bottom: 6px;
+}
+html.dark .auth-title { text-shadow: none; }
+
+.auth-subtitle {
+  color: var(--adium-text-dark-sub);
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.auth-form { display: flex; flex-direction: column; gap: 14px; }
+.auth-field { display: flex; flex-direction: column; gap: 5px; }
+.auth-label { color: var(--adium-text-dark-sub); font-size: 0.88rem; font-weight: 500; }
+
+.auth-input {
+  border: 1px solid var(--adium-border);
+  background: var(--input-bg);
+  color: var(--adium-text-name);
+  padding: 9px 12px;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+  width: 100%;
+}
+.auth-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px hsla(220, 75%, 60%, 0.15);
+}
+
+/* Primary / secondary buttons */
+.primary-btn {
+  background: var(--accent);
+  color: var(--accent-text);
+  border: none;
+  border-radius: 6px;
+  padding: 9px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 150ms ease, box-shadow 150ms ease;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+.primary-btn:hover { background: var(--accent-hover); }
+.primary-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.secondary-btn {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--adium-border);
+  border-radius: 6px;
+  padding: 9px 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+.secondary-btn:hover { background: var(--adium-selected-bg); }
+
+.theme-btn {
+  background: transparent;
+  border: 1px solid var(--adium-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 150ms ease;
+  color: var(--adium-text-meta);
+  line-height: 1;
+}
+.theme-btn:hover { background: var(--adium-selected-bg); }
+
+.auth-switch {
+  margin-top: 16px;
+  text-align: center;
+  color: var(--adium-text-dark-sub);
+  font-size: 0.9rem;
+}
+
+/* -------------------------------------------------------------------
+   Dashboard shell  (replaces the old .dashboard / .topbar layout)
+   ------------------------------------------------------------------- */
+.dashboard {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* no background – html gradient shows through */
+}
+
+/* Top bar  ---------------------------------------------------------- */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--adium-window-bg);
+  border-bottom: 1px solid var(--adium-border);
+  box-shadow: 0 1px 4px hsla(0, 0%, 50%, 0.08);
+  /* Macintosh-style close-button row lives here */
+}
+
+.user-info {
+  font-size: 0.93rem;
+  color: var(--adium-text-dark-sub);
+}
+.user-info strong { color: var(--adium-text-name); font-weight: 600; }
+
+.topbar-meta { display: flex; align-items: center; gap: 10px; }
+
+/* Traffic-light dots that appear at start of topbar */
+.topbar::before {
+  content: '';
+  display: inline-block;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(20px 15px at center 35%, white, rgba(255,255,255,0) 50%),
+              radial-gradient(30px 30px at center bottom, white, transparent);
+  background-color: #FF5F57;
+  box-shadow: 20px 0 0 #FFBD2E, 40px 0 0 #28CA41,
+              0 1px 1px hsla(0,20%,20%,.4) inset,
+              20px 1px 1px hsla(0,20%,20%,.35) inset,
+              40px 1px 1px hsla(0,20%,20%,.3) inset;
+  flex-shrink: 0;
+}
+html.dark .topbar::before { opacity: 0.7; }
+
+/* Status pill */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border: 1px solid var(--adium-border);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  color: var(--adium-text-dark-sub);
+  background: var(--adium-window-bg);
+}
+.status-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--adium-border); }
+.status-pill.connected .dot {
+  background: var(--status-online);
+  box-shadow: 0 0 4px var(--status-online);
+}
+.status-pill.connecting .dot { background: var(--adium-text-light-sub); }
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid var(--adium-border);
+  border-radius: 6px;
+  padding: 5px 14px;
+  font-size: 0.85rem;
+  color: var(--adium-text-dark-sub);
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+.logout-btn:hover { background: var(--adium-selected-bg); }
+
+/* -------------------------------------------------------------------
+   Chatbox – the main two-panel layout
+   ------------------------------------------------------------------- */
+.chatbox {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+
+  margin: 0;
+  width: 100%;
+  background: var(--adium-window-bg);
+  border-radius: 0;
+  border-top: 1px solid var(--adium-border);
+  box-shadow: none;
+  overflow: hidden;
+  min-height: calc(100vh - 52px);
+}
+
+/* -------------------------------------------------------------------
+   Sidebar (sidea)
+   ------------------------------------------------------------------- */
+.sidea {
+  width: 270px;
+  flex-shrink: 0;
+  background: var(--adium-sidebar-bg);
+  border-right: 1px solid var(--adium-border);
+  box-shadow: 0 0 4px hsla(0, 0%, 50%, 0.35);
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  position: relative;
+}
+
+/* Friends header */
+.friends-header {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--adium-border-header);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--adium-text-dark-sub);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.friends-subheader {
+  padding: 6px 10px 2px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--adium-text-light-sub);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Search panel */
+.search-panel { padding: 6px 8px; position: relative; }
+
+.search-box { position: relative; }
+
+.search-box input,
+.sendmessage input {
+  width: 100%;
+  border: 1px solid var(--adium-border);
+  background: var(--input-bg);
+  color: var(--adium-text-name);
+  padding: 7px 30px 7px 10px;
+  border-radius: 4px;
+  outline: none;
+  font-size: 0.88rem;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+  box-shadow: 0 0 2px var(--input-border) inset;
+}
+.search-box input:focus,
+.sendmessage input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px hsla(220, 75%, 60%, 0.12);
+}
+
+.search-spinner {
+  position: absolute;
+  right: 10px; top: 50%;
+  transform: translateY(-50%);
+  width: 12px; height: 12px;
+  border: 2px solid var(--adium-border-list);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+.search-results {
+  list-style: none;
+  margin: 6px 0 0; padding: 0;
+  display: flex; flex-direction: column;
+  gap: 4px;
+}
+
+.search-result-item {
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex; flex-direction: column; gap: 1px;
+  transition: background 120ms ease;
+  border: 1px solid transparent;
+}
+.search-result-item:hover {
+  background: var(--adium-selected-bg);
+  border-color: var(--adium-border-list);
+}
+.search-result-item strong { color: var(--adium-text-name); font-size: 0.9rem; }
+.search-result-item span { color: var(--adium-text-dark-sub); font-size: 0.8rem; }
+
+/* Friend list */
+.friend-list {
+  list-style: none;
+  margin: 0; padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--adium-border-list);
+  cursor: pointer;
+  transition: background 120ms ease;
+  position: relative;
+}
+.friend-item:hover { background: var(--adium-selected-bg); }
+.friend-item.active {
+  background: var(--adium-selected-bg);
+  box-shadow:  0  1px 1px 0 hsla(0, 0%, 85%, 0.5) inset,
+               0 -1px 1px 0 hsla(0, 0%, 85%, 0.5) inset;
+}
+html.dark .friend-item.active {
+  box-shadow: 0 1px 1px rgba(255,255,255,0.04) inset,
+              0 -1px 1px rgba(255,255,255,0.04) inset;
+}
+
+/* Avatar placeholder in friend list */
+.friend-item::before {
+  content: attr(data-initial, '?');
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+  color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.9rem;
+  text-transform: uppercase;
+  box-shadow: 0 0 2px rgba(0,0,0,0.25) inset;
+  font-family: var(--font);
+}
+
+.friend-name { color: var(--adium-text-name); font-size: 0.9rem; font-weight: 600; line-height: 1.2; }
+.friend-meta { color: var(--adium-text-dark-sub); font-size: 0.78rem; }
+
+/* Skeleton shimmer */
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+.friend-skeleton {
+  height: 52px;
+  border-bottom: 1px solid var(--adium-border-list);
+  background: linear-gradient(90deg,
+    var(--adium-window-bg) 0%,
+    var(--adium-selected-bg) 50%,
+    var(--adium-window-bg) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+html.dark .friend-skeleton {
+  background: linear-gradient(90deg, #222226 0%, #2a2a2e 50%, #222226 100%);
+  background-size: 200% 100%;
+}
+
+/* -------------------------------------------------------------------
+   Chat view (sideb)
+   ------------------------------------------------------------------- */
+.sideb {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--adium-chat-bg);
+}
+
+/* Chat header */
+.chat-header {
+  position: relative;
+  height: 44px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--adium-border-chat-header);
+  background: var(--adium-window-bg);
+}
+
+/* gradient drip below header – Adium effect */
+.chat-header::after {
+  content: '';
+  position: absolute;
+  bottom: -15px; left: 0; right: 0;
+  height: 15px;
+  background: radial-gradient(50% 30% at center top, hsla(0, 0%, 50%, 0.1), transparent);
+  pointer-events: none;
+}
+
+.chat-header h2 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--adium-text-name);
+  margin: 0;
+  flex: 1;
+}
+.chat-header p {
+  font-size: 0.82rem;
+  color: var(--adium-text-dark-sub);
+  margin: 0;
+}
+
+/* Online dot in header */
+.chat-header-status {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--status-online);
+  box-shadow: 0 0 4px var(--status-online);
+  flex-shrink: 0;
+}
+
+/* Messages area */
+.messages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px 10px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.empty-state {
+  margin: auto;
+  text-align: center;
+  color: var(--adium-text-dark-sub);
+  font-size: 0.9rem;
+  max-width: 280px;
+  line-height: 1.6;
+}
+
+/* Message articles */
+.message {
+  display: flex;
+  flex-direction: column;
+  max-width: 76%;
+  gap: 3px;
+}
+.message.mine   { align-self: flex-end;   align-items: flex-end; }
+.message.theirs { align-self: flex-start; align-items: flex-start; }
+
+.message .sender {
+  color: var(--adium-text-dark-sub);
+  font-size: 0.76rem;
+  margin-bottom: 1px;
+}
+
+/* Adium-style bubble */
+.bubble {
+  position: relative;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 1.4em;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  overflow: hidden;
+
+  /* received */
+  background-color: var(--bubble-recv-bg);
+  border: 1px solid var(--bubble-recv-border);
+  box-shadow: 0 1px 1px 0 var(--bubble-recv-shadow);
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+  color: var(--adium-text-name);
+}
+html.dark .bubble { text-shadow: none; }
+
+/* shine on top of bubble */
+.bubble::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+  border-radius: inherit;
+  background: radial-gradient(40% 6px at 50% 5px, rgba(255,255,255,0.45) 70%, rgba(255,255,255,0));
+  pointer-events: none;
+}
+html.dark .bubble::after { opacity: 0.15; }
+
+/* sent */
+.message.mine .bubble {
+  background-color: var(--bubble-sent-bg);
+  border-color: var(--bubble-sent-border);
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.08);
+}
+html.dark .message.mine .bubble { text-shadow: none; }
+
+.message.mine .bubble::after {
+  background: radial-gradient(40% 6px at 50% 5px, rgba(255,255,255,0.22) 70%, rgba(255,255,255,0));
+}
+
+.message-time {
+  font-size: 0.7rem;
+  color: var(--adium-text-light-sub);
+  padding: 0 4px;
+}
+
+/* Message skeleton */
+.message-skeleton {
+  height: 36px;
+  border-radius: 1.4em;
+  max-width: 60%;
+  background: linear-gradient(90deg,
+    var(--adium-chat-bg) 0%,
+    var(--adium-window-bg) 50%,
+    var(--adium-chat-bg) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+.message-skeleton.left  { align-self: flex-start; }
+.message-skeleton.right { align-self: flex-end;   }
+
+/* -------------------------------------------------------------------
+   Composer / send bar
+   ------------------------------------------------------------------- */
+.sendmessage {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px;
+  padding: 6px 8px 8px;
+  border-top: 1px solid var(--adium-border-chat-header);
+  background: var(--adium-window-bg);
+  position: relative;
+}
+
+.sendmessage .composer { display: flex; align-items: center; }
+.sendmessage input { border-radius: 4px; }
+
+/* The "speech-bubble pointer" on the right of the input */
+.composer {
+  position: relative;
+}
+.composer::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -6px;
+  transform: translateY(-50%) rotate(45deg);
+  width: 6px; height: 6px;
+  background: var(--input-bg);
+  box-shadow: 1px -1px 0 0.5px var(--input-border);
+}
+
+.sendmessage .primary-btn {
+  border-radius: 4px;
+  padding: 6px 16px;
+  font-size: 0.9rem;
+  min-width: 64px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+/* -------------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .chatbox {
+    margin: 0;
+    width: 100%;
+    border-radius: 0;
+    min-height: calc(100vh - 48px);
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .chatbox { flex-direction: column; }
+  .sidea {
+    width: 100%;
+    max-height: 260px;
+    border-right: none;
+    border-bottom: 1px solid var(--adium-border);
+    box-shadow: 0 4px 6px hsla(0, 0%, 50%, 0.15);
+  }
+  .topbar { flex-wrap: wrap; gap: 8px; }
+  .topbar::before { display: none; }
+  .topbar-meta { flex-wrap: wrap; }
+}
+
+@media (max-width: 480px) {
+  .sendmessage { grid-template-columns: 1fr; }
+  .auth-card { padding: 20px; }
+}
