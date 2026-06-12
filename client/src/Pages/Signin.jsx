@@ -12,11 +12,14 @@ const Signin = () => {
 
   const formSubmitHandler = async (e) => {
     e.preventDefault();
-    const {user, token} = await signin({email, password});
-  
-    auth.token = token;
-    auth.user = user;
-    navigate("/dashboard");
+    try {
+      const {user, token} = await signin({email, password});
+      auth.token = token;
+      auth.user = user;
+      navigate("/dashboard");
+    } catch (error) {
+      // Error already shown via alert in authApi
+    }
   };
   return (
     <div className="auth-page">

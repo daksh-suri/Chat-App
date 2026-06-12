@@ -13,7 +13,9 @@ async function signup({ name, email, password }) {
     })
     return data;
   } catch (error) {
-    alert(error?.response?.data?.message);
+    const message = error?.response?.data?.message || 'Signup failed. Please try again.';
+    alert(message);
+    throw error;
   }
 }
 
@@ -28,7 +30,9 @@ async function signin({ email, password }) {
     })
     return data;
   } catch (error) {
-    alert(error?.response?.data?.message);
+    const message = error?.response?.data?.message || 'Signin failed. Please try again.';
+    alert(message);
+    throw error;
   }
 }
 
