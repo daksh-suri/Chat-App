@@ -3,6 +3,7 @@ import useAuth from "../context/authContext";
 import { io } from "socket.io-client";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useCallback } from "react";
 import auth from "../lib/auth";
 import axios from "../api/axios";
 
@@ -26,6 +27,15 @@ const Dashboard = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [theme, setTheme] = useState("system");
+
+  const handleAuthError = useCallback((error) => {
+    if (error?.response?.status === 401) {
+      logout();
+      return true;
+    }
+
+    return false;
+  }, [logout]);
 
   useEffect(() => {
     const socket = io(import.meta.env.VITE_API_URL || "http://localhost:4444", {
@@ -65,8 +75,13 @@ const Dashboard = () => {
       .then(({ data }) => {
         setFriendList(data);
       })
+      .catch((error) => {
+        if (!handleAuthError(error)) {
+          alert(error?.response?.data?.message || "Unable to load friends");
+        }
+      })
       .finally(() => setIsLoadingFriends(false));
-  }, [isConnected]);
+  }, [handleAuthError, isConnected]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("chat-theme");
@@ -99,6 +114,10 @@ const Dashboard = () => {
     try {
       const { data } = await axios.get("/api/user/search", { params: { q } });
       setSearchResults(data);
+    } catch (error) {
+      if (!handleAuthError(error)) {
+        alert(error?.response?.data?.message || "Unable to search users");
+      }
     } finally {
       setIsSearching(false);
     }
@@ -119,6 +138,11 @@ const Dashboard = () => {
     axios
       .get("/api/user/messages", { params: { conversationId } })
       .then(({ data }) => setMessages(data))
+      .catch((error) => {
+        if (!handleAuthError(error)) {
+          alert(error?.response?.data?.message || "Unable to load messages");
+        }
+      })
       .finally(() => setIsLoadingMessages(false));
   };
 
@@ -130,7 +154,9 @@ const Dashboard = () => {
       setFriendList((prev) => (prev.some((item) => item.id === data.conversation.id) ? prev : [data.conversation, ...prev]));
       openConversation(peer, data.conversation.id);
     } catch (error) {
-      alert(error?.response?.data?.message || "Unable to open conversation");
+      if (!handleAuthError(error)) {
+        alert(error?.response?.data?.message || "Unable to open conversation");
+      }
     }
   };
 

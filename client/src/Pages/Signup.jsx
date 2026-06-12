@@ -12,10 +12,14 @@ const Signup = () => {
 
   const formSubmitHandler = async (e) => {
     e.preventDefault();
-    const { token, user } = await signup({ name, email, password });
-    auth.token = token;
-    auth.user = user;
-    navigate("/dashboard");
+    try {
+      const { token, user } = await signup({ name: name.trim(), email: email.trim(), password });
+      auth.token = token;
+      auth.user = user;
+      navigate("/dashboard");
+    } catch {
+      // Error already shown via alert in authApi
+    }
   };
 
   return (
@@ -68,5 +72,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
-

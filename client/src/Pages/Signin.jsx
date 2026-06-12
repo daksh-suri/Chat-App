@@ -8,16 +8,16 @@ const Signin = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
-  const {signin} = useAuth();
+  const { signin, loading } = useAuth();
 
   const formSubmitHandler = async (e) => {
     e.preventDefault();
     try {
-      const {user, token} = await signin({email, password});
+      const { user, token } = await signin({ email: email.trim(), password });
       auth.token = token;
       auth.user = user;
       navigate("/dashboard");
-    } catch (error) {
+    } catch {
       // Error already shown via alert in authApi
     }
   };
@@ -49,7 +49,7 @@ const Signin = () => {
             />
           </label>
 
-          <button className="primary-btn" type="submit">Sign in</button>
+          <button className="primary-btn" type="submit" disabled={loading}>{loading ? "Signing in..." : "Sign in"}</button>
         </form>
         <p className="auth-switch">
           Not a user yet? <button className="secondary-btn" onClick={() => navigate("/signup")}>Create account</button>
